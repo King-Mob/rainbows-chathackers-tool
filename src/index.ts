@@ -4,6 +4,9 @@ import * as fs from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import handleMessage from "./messages";
+import { sendMessage } from './requests';
+import { generateRainbow } from './rainbow';
+import { getRainbowsByRoomId, insertRainbow } from './duckdb';
 
 const { secret } = process.env;
 
@@ -51,12 +54,27 @@ async function start() {
     res.send({ success: true, response });
   });
 
-  app.get("/api/state", async (req, res) => {
+  app.get("/api/rainbows", async (req, res) => {
     const { roomId } = req.query;
 
-    console.log(roomId)
+    const rainbows = await getRainbowsByRoomId(roomId as string);
 
-    res.send({ success: true, rainbows: true })
+    console.log(rainbows)
+
+    res.send(rainbows.map(rainbow => ({ ...rainbow, sent: new Date(rainbow.sent.toString()) })));
+  })
+
+  app.post("/api/rainbow", async (req, res) => {
+    const { roomId } = req.query;
+
+    console.log("rainbow requested")
+
+    const rainbow = generateRainbow();
+
+    sendMessage(roomId as string, `Here's a new rainbow, from the dashboard\n${rainbow}`);
+    insertRainbow(roomId as string, rainbow);
+
+    res.send({ success: true })
   })
 
   app.listen(port);

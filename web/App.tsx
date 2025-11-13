@@ -1,34 +1,42 @@
 import "./App.css";
 import { useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
-import { getToolState } from "./requests";
-import { type State } from "../types";
+import { getRainbows, postRainbow } from "./requests";
 
 export default function App() {
   const [searchParams] = useSearchParams();
   const roomId = searchParams.get("roomId");
-  const [toolState, setToolState] = useState<State>();
+  const [rainbows, setRainbows] = useState<string[]>([]);
 
-  async function loadToolState(roomId: string) {
-    const toolState = await getToolState(roomId);
-    console.log(toolState);
-    setToolState(toolState);
+  async function loadRainbows(roomId: string) {
+    const rainbows = await getRainbows(roomId);
+    console.log(rainbows);
+    setRainbows(
+      rainbows.map((rainbow: { rainbow: string }) => rainbow.rainbow)
+    );
+  }
+
+  async function sendRainbow() {
+    if (roomId) {
+      await postRainbow(roomId);
+      loadRainbows(roomId);
+    }
   }
 
   useEffect(() => {
     if (roomId) {
-      loadToolState(roomId);
+      loadRainbows(roomId);
     }
   }, []);
 
   return (
     <div>
       <h1>Rainbow Tool dashboard</h1>
-      {toolState && (
-        <div>
-          <p>We're making rainbows</p>
-        </div>
-      )}
+      <button onClick={sendRainbow}>Send new rainbow</button>
+      <h2>Past rainbows</h2>
+      {rainbows.map((rainbow) => (
+        <p>{rainbow}</p>
+      ))}
     </div>
   );
 }

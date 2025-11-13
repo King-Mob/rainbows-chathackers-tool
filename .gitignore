@@ -1,5 +1,7 @@
 # Generated files
 rainbow.json
+*duckdb.db
+*duckdb.db.wal
 
 # Logs
 logs
