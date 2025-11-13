@@ -71,7 +71,10 @@ async function start() {
 
     const rainbow = generateRainbow();
 
-    sendMessage(roomId as string, `Here's a new rainbow, from the dashboard\n${rainbow}`);
+    const response = await sendMessage(roomId as string, `Here's a new rainbow, from the dashboard\n${rainbow}`);
+    const result = await response.json();
+    console.log(result)
+
     insertRainbow(roomId as string, rainbow);
 
     res.send({ success: true })
