@@ -5,7 +5,7 @@ const rainbow = async (roomId) => {
   const rainbow = generateRainbow();
 
   setTimeout(() => {
-    sendMessage(roomId, `Here's a new rainbow!\n${rainbow}\n See you in 24 hours for your next rainbow!`)
+    sendMessage(roomId, `Here's a new rainbow!\n${generateRainbow()}\n See you in 24 hours for your next rainbow!`)
   }, 5000)
 
   return {
