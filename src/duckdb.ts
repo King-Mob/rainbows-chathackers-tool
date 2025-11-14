@@ -45,7 +45,8 @@ export async function insertRainbow(roomId: string, rainbow: string) {
     const prepared = await connection.prepare(insertRainbow);
     prepared.bindVarchar(1, roomId);
     prepared.bindVarchar(2, rainbow);
-    prepared.bindTimestampSeconds(3, timestampSecondsValue(BigInt(Date.now() / 1000)));
+    const timestamp = timestampSecondsValue(BigInt(Math.floor(Date.now() / 1000)))
+    prepared.bindTimestampSeconds(3, timestamp);
     await prepared.run();
     return;
 }
