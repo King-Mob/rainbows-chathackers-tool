@@ -1,4 +1,4 @@
-import { DuckDBConnection, DuckDBInstance } from "@duckdb/node-api";
+import { DuckDBConnection, DuckDBInstance, timestampSecondsValue } from "@duckdb/node-api";
 
 let connection: DuckDBConnection;
 
@@ -41,10 +41,11 @@ export async function getRainbowsByRoomId(roomId: string) {
 }
 
 export async function insertRainbow(roomId: string, rainbow: string) {
-    const insertRainbow = `INSERT INTO Rainbows values ($1, $2, 'epoch'::TIMESTAMP_S);`;
+    const insertRainbow = `INSERT INTO Rainbows values ($1, $2, $3);`;
     const prepared = await connection.prepare(insertRainbow);
     prepared.bindVarchar(1, roomId);
     prepared.bindVarchar(2, rainbow);
+    prepared.bindTimestampSeconds(3, timestampSecondsValue(BigInt(Date.now() / 1000)));
     await prepared.run();
     return;
 }
