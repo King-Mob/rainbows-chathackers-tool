@@ -31,6 +31,14 @@ export async function startDuckDB() {
     });
 }
 
+export async function getRainbowsAll() {
+    const getRainbows = `SELECT * FROM Rainbows;`;
+    const prepared = await connection.prepare(getRainbows);
+    const rainbowsRows = await prepared.run();
+    const rainbows = await rainbowsRows.getRowObjects();
+    return rainbows;
+}
+
 export async function getRainbowsByRoomId(roomId: string) {
     const getRainbows = `SELECT * FROM Rainbows WHERE room_id = $1;`;
     const prepared = await connection.prepare(getRainbows);

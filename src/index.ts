@@ -7,6 +7,7 @@ import handleMessage from "./messages";
 import { sendMessage } from './requests';
 import { generateRainbow } from './rainbow';
 import { getRainbowsByRoomId, insertRainbow } from './duckdb';
+import beginSchedule from "./scheduler";
 
 const { secret } = process.env;
 
@@ -86,3 +87,4 @@ async function start() {
 
 generateRegistrationFile();
 start();
+setTimeout(beginSchedule, 2000)

@@ -1,15 +1,8 @@
 import { insertRainbow } from "./duckdb";
 import { generateRainbow } from "./rainbow";
-import { sendMessage } from "./requests";
 
 const rainbow = async (roomId) => {
   const rainbow = generateRainbow();
-
-  setTimeout(() => {
-    const newRainbow = generateRainbow()
-    sendMessage(roomId, `Here's a new rainbow!\n${newRainbow}\n See you in 24 hours for your next rainbow!`)
-    insertRainbow(roomId, newRainbow);
-  }, 5000)
 
   insertRainbow(roomId, rainbow);
 
